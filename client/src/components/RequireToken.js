@@ -47,16 +47,17 @@ function RequireToken({ children }) {
 
   if (status === "denied") {
     return (
-      <div className="container" style={{ textAlign: "center", marginTop: "3rem" }}>
+      <div className="container" style={{ textAlign: "center", marginTop: "2rem" }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <img
             src="/assets/jp.gif"
             alt="Jurassic Park Hack"
             style={{
-              maxWidth: "400px",
               width: "100%",
+              maxWidth: "300px", // keep reasonable size on desktop
+              height: "auto",
               borderRadius: "12px",
-              marginBottom: "2rem"
+              marginBottom: "1.5rem"
             }}
           />
         </div>
@@ -64,17 +65,18 @@ function RequireToken({ children }) {
           style={{
             color: "#cba44d",
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "1.8rem",
-            marginBottom: "1rem"
+            fontSize: "clamp(1.2rem, 4vw, 1.8rem)", // scales with screen size
+            marginBottom: "0.75rem",
+            lineHeight: 1.3,
           }}
         >
           Ah Ah Ah! You didn&apos;t say the magic word!
         </h2>
         <p
           style={{
-            color: "white",
-            fontSize: "1.2rem",
-            marginTop: "0.5rem"
+            color: "#cba44d",
+            fontSize: "clamp(1rem, 3.5vw, 1.2rem)", // scales on mobile
+            marginTop: "0.5rem",
           }}
         >
           Please scan the new code to gain access!
@@ -87,5 +89,6 @@ function RequireToken({ children }) {
 }
 
 export default RequireToken;
+
 
 
