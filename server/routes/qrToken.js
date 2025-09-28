@@ -70,7 +70,7 @@ router.post('/validate', async (req, res) => {
   }
 });
 
-// GET /entry → redirect with today’s token
+// GET /entry → redirect to frontend with today’s token
 router.get('/entry', async (req, res) => {
   try {
     const token = await getDailyToken();
@@ -85,4 +85,5 @@ router.get('/entry', async (req, res) => {
 });
 
 module.exports = router;
+
 
