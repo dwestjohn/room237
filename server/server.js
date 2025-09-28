@@ -11,20 +11,26 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// --- Routes ---
+const qrTokenRoutes = require('./routes/qrToken');
+
+// ✅ mount QR token routes first so /entry always works
+app.use('/', qrTokenRoutes);
+app.use('/api/qr-token', qrTokenRoutes);
+
 const recipeRoutes = require('./routes/recipe');
 app.use('/api/recipes', recipeRoutes);
-const orderRoutes = require('./routes/order'); 
+
+const orderRoutes = require('./routes/order');
 app.use('/api/order', orderRoutes);
+
 const drinkOrderRoutes = require('./routes/drinkOrders');
 app.use('/api/drink-orders', drinkOrderRoutes);
+
 const inventoryRoutes = require('./routes/inventory');
 app.use('/api/inventory', inventoryRoutes);
-const qrTokenRoutes = require('./routes/qrToken');
-app.use('/api/qr-token', qrTokenRoutes);
-app.use('/', qrTokenRoutes); // expose /entry
 
-// Create HTTP + Socket.IO server
+// --- Keno 237 Game State ---
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -32,7 +38,6 @@ const io = new Server(server, {
   },
 });
 
-// --- Keno 237 Game State ---
 let players = [];
 let gameMaster = null;
 
@@ -41,10 +46,9 @@ io.on('connection', (socket) => {
 
   // Player joins (with persistent ID support)
   socket.on('join', (name, playerId, callback) => {
-    // See if player already exists
     let existing = players.find((p) => p.playerId === playerId);
     if (existing) {
-      existing.id = socket.id; // update live socket
+      existing.id = socket.id;
       io.emit('playersUpdate', players);
       if (callback) callback(existing);
       return;
@@ -53,7 +57,7 @@ io.on('connection', (socket) => {
     const isFirst = players.length === 0;
     const newPlayer = {
       id: socket.id,
-      playerId, // persistent ID from client
+      playerId,
       name,
       isGM: isFirst,
       number: null,
@@ -129,11 +133,10 @@ io.on('connection', (socket) => {
     io.emit('boardCleared');
   });
 
-  // Player disconnects (keep them in list for persistence)
+  // Player disconnects
   socket.on('disconnect', () => {
     console.log('❌ User disconnected:', socket.id);
 
-    // If GM left, promote next available
     if (socket.id === gameMaster) {
       const next = players.find((p) => p.id !== socket.id);
       gameMaster = next ? next.id : null;
@@ -152,6 +155,7 @@ io.on('connection', (socket) => {
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
 
 
 
