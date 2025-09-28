@@ -49,17 +49,18 @@ function RequireToken({ children }) {
     return (
       <div className="container" style={{ textAlign: "center", marginTop: "2rem" }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <img
-            src="/assets/jp.gif"
-            alt="Jurassic Park Hack"
-            style={{
-              width: "100%",
-              maxWidth: "300px", // keep reasonable size on desktop
-              height: "auto",
-              borderRadius: "12px",
-              marginBottom: "1.5rem"
-            }}
-          />
+                  <img
+          src="/assets/jp.gif"
+          alt="Jurassic Park Hack"
+          style={{
+            width: "100%",
+            maxWidth: "220px",   // ⬅️ smaller cap, fits better on phones
+            height: "auto",
+            borderRadius: "12px",
+            marginBottom: "1rem" // less spacing under image
+          }}
+        />
+
         </div>
         <h2
           style={{
