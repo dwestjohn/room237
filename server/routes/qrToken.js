@@ -11,7 +11,7 @@ async function cleanupExpiredTokens() {
 // Utility: get or create today’s token
 async function getDailyToken() {
   const today = new Date().toISOString().split("T")[0];
-  const tomorrow = new Date(Date.now() + 24*60*60*1000).toISOString().split("T")[0];
+  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0];
 
   // Cleanup old rows first
   await cleanupExpiredTokens();
@@ -70,4 +70,19 @@ router.post('/validate', async (req, res) => {
   }
 });
 
+// GET /entry → redirect with today’s token
+router.get('/entry', async (req, res) => {
+  try {
+    const token = await getDailyToken();
+
+    // Redirect back to frontend with token in query string
+    const redirectUrl = `https://www.room237bar.com/?token=${token}`;
+    res.redirect(redirectUrl);
+  } catch (err) {
+    console.error('Error in /entry route:', err);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;
+
