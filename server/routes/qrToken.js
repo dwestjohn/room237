@@ -11,24 +11,20 @@ async function cleanupExpiredTokens() {
 // Utility: get or create today’s token
 async function getDailyToken() {
   const today = new Date().toISOString().split("T")[0];
-  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0];
 
-  // Cleanup old rows first
   await cleanupExpiredTokens();
 
-  // Check if today's token exists
   const existing = await pool.query(
     "SELECT token FROM qr_tokens WHERE valid_from=$1 AND valid_to=$2",
     [today, tomorrow]
   );
 
-  if (existing.rows.length > 0) {
-    return existing.rows[0].token;
-  }
+  if (existing.rows.length > 0) return existing.rows[0].token;
 
-  // Create a new token
   const token = crypto.randomBytes(16).toString("hex");
-
   await pool.query(
     "INSERT INTO qr_tokens (token, valid_from, valid_to) VALUES ($1, $2, $3)",
     [token, today, tomorrow]
@@ -37,8 +33,8 @@ async function getDailyToken() {
   return token;
 }
 
-// GET /api/qr-token → returns today’s token
-router.get('/', async (req, res) => {
+// ✅ GET today’s token
+router.get('/api/qr-token', async (req, res) => {
   try {
     const token = await getDailyToken();
     res.json({ token });
@@ -48,8 +44,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /api/qr-token/validate → check token validity
-router.post('/validate', async (req, res) => {
+// ✅ Validate token
+router.post('/api/qr-token/validate', async (req, res) => {
   const { token } = req.body;
   const today = new Date().toISOString().split("T")[0];
 
@@ -70,12 +66,10 @@ router.post('/validate', async (req, res) => {
   }
 });
 
-// GET /entry → redirect to frontend with today’s token
+// ✅ QR entry redirect
 router.get('/entry', async (req, res) => {
   try {
     const token = await getDailyToken();
-
-    // Redirect back to frontend with token in query string
     const redirectUrl = `https://www.room237bar.com/?token=${token}`;
     res.redirect(redirectUrl);
   } catch (err) {
@@ -85,5 +79,6 @@ router.get('/entry', async (req, res) => {
 });
 
 module.exports = router;
+
 
 

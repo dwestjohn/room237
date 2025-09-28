@@ -11,17 +11,11 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// --- Routes ---
-const qrTokenRoutes = require('./routes/qrToken');
-
-// ✅ mount QR token routes first so /entry always works
-app.use('/', qrTokenRoutes);
-app.use('/api/qr-token', qrTokenRoutes);
-
+// Routes
 const recipeRoutes = require('./routes/recipe');
 app.use('/api/recipes', recipeRoutes);
 
-const orderRoutes = require('./routes/order');
+const orderRoutes = require('./routes/order'); 
 app.use('/api/order', orderRoutes);
 
 const drinkOrderRoutes = require('./routes/drinkOrders');
@@ -30,14 +24,18 @@ app.use('/api/drink-orders', drinkOrderRoutes);
 const inventoryRoutes = require('./routes/inventory');
 app.use('/api/inventory', inventoryRoutes);
 
-// --- Keno 237 Game State ---
+const qrTokenRoutes = require('./routes/qrToken');
+app.use(qrTokenRoutes);   // ✅ mounts /api/qr-token/... and /entry
+
+// Create HTTP + Socket.IO server
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // ⚠️ restrict later to your frontend URL
+    origin: "*", // ⚠️ later restrict to your frontend URL
   },
 });
 
+// --- Keno 237 Game State ---
 let players = [];
 let gameMaster = null;
 
@@ -48,7 +46,7 @@ io.on('connection', (socket) => {
   socket.on('join', (name, playerId, callback) => {
     let existing = players.find((p) => p.playerId === playerId);
     if (existing) {
-      existing.id = socket.id;
+      existing.id = socket.id; // update live socket
       io.emit('playersUpdate', players);
       if (callback) callback(existing);
       return;
@@ -70,7 +68,6 @@ io.on('connection', (socket) => {
     if (callback) callback(newPlayer);
   });
 
-  // Player picks a number
   socket.on('pickNumber', (num, callback) => {
     if (players.some((p) => p.number === num)) return;
     players = players.map((p) =>
@@ -81,7 +78,6 @@ io.on('connection', (socket) => {
     if (callback) callback(updated);
   });
 
-  // Player marks ready
   socket.on('ready', (callback) => {
     players = players.map((p) =>
       p.id === socket.id ? { ...p, ready: true } : p
@@ -91,7 +87,6 @@ io.on('connection', (socket) => {
     if (callback) callback(updated);
   });
 
-  // GM starts round
   socket.on('startRound', () => {
     if (socket.id !== gameMaster) return;
 
@@ -121,7 +116,6 @@ io.on('connection', (socket) => {
     }, drawn.length * 5000);
   });
 
-  // GM clears board
   socket.on('clearBoard', () => {
     if (socket.id !== gameMaster) return;
     players = players.map((p) => ({
@@ -133,10 +127,8 @@ io.on('connection', (socket) => {
     io.emit('boardCleared');
   });
 
-  // Player disconnects
   socket.on('disconnect', () => {
     console.log('❌ User disconnected:', socket.id);
-
     if (socket.id === gameMaster) {
       const next = players.find((p) => p.id !== socket.id);
       gameMaster = next ? next.id : null;
@@ -146,7 +138,6 @@ io.on('connection', (socket) => {
         );
       }
     }
-
     io.emit('playersUpdate', players);
   });
 });
@@ -155,6 +146,7 @@ io.on('connection', (socket) => {
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
 
 
 
