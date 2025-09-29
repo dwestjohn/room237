@@ -1,3 +1,4 @@
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MenuPage from './pages/MenuPage';
@@ -7,55 +8,56 @@ import CreateInventoryPage from './pages/CreateInventoryPage';
 import './App.css';
 import KenoBoard from "./pages/KenoBoard";
 import KenoJoin from "./pages/KenoJoin";
-import RequireToken from "./components/RequireToken"; // ⬅️ import wrapper
+import RequirePin from "./components/RequirePin"; // ⬅️ using hardcoded PIN wrapper
 
 function App() {
   return (
     <Router>
       <div className="container">
         <Routes>
+          {/* 🔒 PIN-protected routes */}
           <Route
             path="/"
             element={
-              <RequireToken>
+              <RequirePin>
                 <MenuPage />
-              </RequireToken>
+              </RequirePin>
             }
           />
           <Route
             path="/drink-orders"
             element={
-              <RequireToken>
+              <RequirePin>
                 <DrinkOrders />
-              </RequireToken>
+              </RequirePin>
             }
           />
           <Route
             path="/inventory"
             element={
-              <RequireToken>
+              <RequirePin>
                 <InventoryPage />
-              </RequireToken>
+              </RequirePin>
             }
           />
           <Route
             path="/create-inventory"
             element={
-              <RequireToken>
+              <RequirePin>
                 <CreateInventoryPage />
-              </RequireToken>
+              </RequirePin>
             }
           />
 
-          {/* ✅ Public page (no QR token required) */}
+          {/* ✅ Public routes (no PIN required) */}
           <Route path="/casino/keno237/board" element={<KenoBoard />} />
 
           <Route
             path="/casino/keno237/join"
             element={
-              <RequireToken>
+              <RequirePin>
                 <KenoJoin />
-              </RequireToken>
+              </RequirePin>
             }
           />
         </Routes>
@@ -65,5 +67,6 @@ function App() {
 }
 
 export default App;
+
 
 
