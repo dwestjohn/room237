@@ -1,3 +1,4 @@
+// src/pages/MenuPage.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
@@ -30,36 +31,36 @@ function MenuPage() {
     // Recipes by type
     api.get('/api/recipes/type/Cocktail')
       .then(res => setCocktails(res.data))
-      .catch(err => console.error('Error loading cocktails:', err));
+      .catch(err => console.error('❌ Cocktails load failed:', err));
 
     api.get('/api/recipes/type/Mocktail')
       .then(res => setMocktails(res.data))
-      .catch(err => console.error('Error loading mocktails:', err));
+      .catch(err => console.error('❌ Mocktails load failed:', err));
 
     api.get('/api/recipes/type/Shot')
       .then(res => setShots(res.data))
-      .catch(err => console.error('Error loading shots:', err));
+      .catch(err => console.error('❌ Shots load failed:', err));
 
     // Inventory-based sections
     api.get('/api/recipes/topshelf')
       .then(res => setTopShelf(res.data))
-      .catch(err => console.error('Error loading top shelf items:', err));
+      .catch(err => console.error('❌ Top Shelf load failed:', err));
 
     api.get('/api/recipes/beers')
       .then(res => setBeers(res.data))
-      .catch(err => console.error('Error loading beers:', err));
+      .catch(err => console.error('❌ Beers load failed:', err));
 
     api.get('/api/recipes/wines')
       .then(res => setWineList(res.data))
-      .catch(err => console.error('Error loading wines:', err));
+      .catch(err => console.error('❌ Wines load failed:', err));
 
     api.get('/api/recipes/seltzers')
       .then(res => setSeltzers(res.data))
-      .catch(err => console.error('Error loading seltzers:', err));
+      .catch(err => console.error('❌ Seltzers load failed:', err));
 
     api.get('/api/recipes/nonalcoholic')
       .then(res => setNonAlcoholic(res.data))
-      .catch(err => console.error('Error loading non-alcoholic items:', err));
+      .catch(err => console.error('❌ Non-Alcoholic load failed:', err));
   }, []);
 
   const handleOrderClick = (recipe) => {
@@ -85,10 +86,10 @@ function MenuPage() {
         recipe_id: selectedRecipe.recipe_id,
         quantity: quantity
       });
-      alert('Order placed successfully!');
+      alert('✅ Order placed successfully!');
       resetForm();
     } catch (err) {
-      console.error(err);
+      console.error('❌ Order failed:', err);
       alert('Failed to place order.');
     }
   };
@@ -233,7 +234,6 @@ function MenuPage() {
         </p>
       )}
 
-
       {/* Venmo Tip Button */}
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
         <a
@@ -259,15 +259,10 @@ function MenuPage() {
         </p>
       </div>
 
-
-
-            {/* Navigation Buttons */}
+      {/* Navigation Buttons */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '2rem' }}>
         <button
-          onClick={() => {
-            setPinContext('orders');
-            setShowPinPrompt(true);
-          }}
+          onClick={() => { setPinContext('orders'); setShowPinPrompt(true); }}
           className="bartender-button"
           aria-label="Enter PIN for Drink Orders"
         >
@@ -275,10 +270,7 @@ function MenuPage() {
         </button>
 
         <button
-          onClick={() => {
-            setPinContext('inventory');
-            setShowPinPrompt(true);
-          }}
+          onClick={() => { setPinContext('inventory'); setShowPinPrompt(true); }}
           className="bartender-button"
           aria-label="Enter PIN for Inventory"
         >
@@ -286,10 +278,7 @@ function MenuPage() {
         </button>
 
         <button
-          onClick={() => {
-            setPinContext('board');
-            setShowPinPrompt(true);
-          }}
+          onClick={() => { setPinContext('board'); setShowPinPrompt(true); }}
           className="bartender-button"
           aria-label="Enter PIN for Keno Board"
         >
@@ -297,10 +286,7 @@ function MenuPage() {
         </button>
 
         <button
-          onClick={() => {
-            setPinContext('join');
-            setShowPinPrompt(true);
-          }}
+          onClick={() => { setPinContext('join'); setShowPinPrompt(true); }}
           className="bartender-button"
           aria-label="Enter PIN for Player Join"
         >
@@ -352,4 +338,5 @@ function MenuPage() {
 }
 
 export default MenuPage;
+
 
