@@ -1,0 +1,330 @@
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', sans-serif;
+  background-color: #000000; 
+  color: white;
+}
+
+.container {
+  padding: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: red;
+}
+
+.card {
+  background: #111; 
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(255,255,255,0.05);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card .motto {
+  color: #cba44d;
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+
+}
+
+.card .recipe-name {
+  color: #fffaea;
+  font-size: 2.1rem;
+  font-family: 'Great Vibes', cursive;
+  margin: 0;
+}
+
+.card .description {
+  color: #cba44d;
+  font-size: 1.2rem;
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.logo {
+  max-width: 325px; 
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.section-title {
+  color: white;
+  text-align: center;
+  font-size: 1.6rem;
+  margin: 1rem 0;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  letter-spacing: 1px;
+}
+
+.order-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #cba44d;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.order-button:hover {
+  background-color: darkred;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: gold;
+}
+
+.cancel-button {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: white;
+  cursor: pointer;
+  padding: 0 0.5rem;
+}
+
+.cancel-button:hover {
+  color: red;
+}
+
+.orders-container {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.order-card {
+  background: #111;
+  color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-info {
+  max-width: 85%;
+}
+
+
+.gold-title { 
+  color: #cba44d;
+  font-size: 4rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.bartender-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  margin: 2rem auto 0;
+}
+
+.bartender-button img {
+  width: 50px;
+  height: 50px;
+  filter: brightness(10) invert(1); /* forces white */
+  transition: transform 0.2s ease;
+}
+
+.bartender-button img:hover {
+  transform: scale(1.1);
+}
+
+.pin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.pin-box {
+  background: #111;
+  border: 2px solid #cba44d;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  width: 300px;
+}
+
+.pin-input {
+  width: 100%;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  text-align: center;
+  background: #222;
+  color: white;
+  border: 1px solid #cba44d;
+  border-radius: 5px;
+}
+
+.pin-error {
+  color: red;
+  margin-top: 0.5rem;
+}
+
+.pin-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.pin-actions button {
+  background: #cba44d;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: black;
+  border-radius: 5px;
+}
+
+.beer-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.beer-name {
+  white-space: nowrap;
+}
+
+.dot {
+  margin: 0 0.75rem;
+  color: #cba44d;
+  font-size: 1.5rem;
+  user-select: none;
+}
+
+.section-spacer {
+  margin-top: 4.0rem;
+}
+
+.inline-drink {
+  font-size: 0.75rem;  /* Slightly smaller than the main recipe-name font */
+  color: white;
+}
+
+.inventory-table {
+  width: 100%;
+  margin-top: 2rem;
+  border-collapse: collapse;
+  color: white;
+}
+
+.inventory-table th,
+.inventory-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #cba44d;
+  text-align: left;
+}
+
+.remove-button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.keno-cell {
+  aspect-ratio: 1;        /* keep cells square */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #cba44d;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .keno-cell {
+    font-size: 0.7rem;     /* smaller font on phones */
+  }
+}
+
+
+.keno-drawn {
+  background: gold;
+  color: black;
+}
+
+@keyframes flash {
+  0% { background-color: #ce961f; color: black; transform: scale(1); }
+  50% { background-color: orange; color: white; transform: scale(1.2); }
+  100% { background-color: red; color: black; transform: scale(1); }
+}
+
+.keno-drawn {
+  background: red;
+  color: black;
+}
+
+.keno-latest {
+  animation: flash 1s ease-in-out;
+}
+
+.keno-picked {
+  background: #ccc !important;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.keno-selected {
+  background: dodgerblue !important;
+  color: white;
+}
+
+.keno-player-hit {
+  background: limegreen !important;
+  color: white;
+  animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.2); }
+}
