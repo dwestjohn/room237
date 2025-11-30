@@ -1,0 +1,108 @@
+--TABLES
+SELECT * FROM inventory
+SELECT * FROM location
+SELECT * FROM order_log
+SELECT * FROM recipe
+SELECT * FROM recipe_ingredient
+SELECT * FROM type
+SELECT * FROM vessel
+
+--Recipe Ingredient Update
+	ALTER TABLE recipe_ingredient
+	ADD CONSTRAINT recipe_ingredient_type_id_fkey
+	FOREIGN KEY (type_id)
+	REFERENCES type(type_id)
+
+--UPDATE
+UPDATE recipe
+SET description = 'A frozen-style cocktail containing gin, crushed ice, creme de mure, lemon juice, and syrup. Lemon wheel garnish. Yum.'
+WHERE recipe_id = 10
+	
+DELETE FROM recipe_ingredient
+	where recipe_id = 12 AND quantity = 'Test'
+
+--INSERT
+
+
+	
+INSERT INTO recipe_ingredient(recipe_id, quantity, type_id)
+	VALUES(10, 'Garn Slice of', 15)
+	
+--DYNAMIC MENU PAGE (TEST)
+SELECT r.recipe_name, r.motto, r.description
+FROM recipe r
+WHERE NOT EXISTS (
+	SELECT 1
+	FROM recipe_ingredient ri
+	JOIN type i ON i.type_id = ri.type_id
+	WHERE ri.recipe_id = r.recipe_id
+	AND NOT EXISTS (
+	SELECT 1
+	FROM inventory i2
+	WHERE i2.type_id = i.type_id
+	AND i2.is_active = true	
+	)
+) ORDER BY recipe_name ASC
+
+
+
+
+
+
+--DYNAMIC ORDER LOG
+SELECT
+  ol.order_id,
+  ol.person_name,
+  r.recipe_name,
+  STRING_AGG(ri.quantity || ' ' || t.type_name, ', ' ORDER BY t.type_name) AS ingredients,
+  v.method,
+  v.glassware,
+  ol.order_time
+FROM order_log ol
+JOIN recipe_ingredient ri ON ri.recipe_id = ol.recipe_id
+JOIN type t ON t.type_id = ri.type_id
+JOIN recipe r ON ri.recipe_id = r.recipe_id
+JOIN vessel v ON r.vessel_id = v.vessel_id
+GROUP BY ol.order_id, ol.person_name, r.recipe_name, v.method, v.glassware, ol.order_time
+ORDER BY ol.order_time;
+
+
+
+
+--Beer Fetch
+SELECT i.inventory_name
+      FROM inventory i
+      JOIN type t ON i.type_id = t.type_id
+      WHERE t.type_name ILIKE 'Beer' AND i.is_active = true
+      ORDER BY i.inventory_name
+
+--Seltzer Fetch
+SELECT i.inventory_name
+      FROM inventory i
+      JOIN type t ON i.type_id = t.type_id
+      WHERE t.type_name ILIKE 'seltzer' AND i.is_active = true
+      ORDER BY i.inventory_name
+
+--NA Fetch
+SELECT i.inventory_name
+      FROM inventory i
+      JOIN type t ON i.type_id = t.type_id
+      WHERE t.type_name ILIKE 'n/a' AND i.is_active = true
+      ORDER BY i.inventory_name
+
+--Top Shelf Fetch
+SELECT i.inventory_name
+      FROM inventory i
+      JOIN type t ON i.type_id = t.type_id
+      WHERE t.type_name ILIKE 'top shelf' AND i.is_active = true
+      ORDER BY i.inventory_name
+
+--Inventory List
+SELECT inventory_id, inventory_name, is_active
+      FROM inventory
+      ORDER BY inventory_name
+
+--Vessel Fetch
+SELECT vessel_id, method, glassware
+      FROM vessel
+      ORDER BY method, glassware
